@@ -5,11 +5,14 @@ import java.io.*;
 
 
 public class A4Driver {
-
+	
+	public final static int WORDLENGTH = 5;
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		if (args.length != 2) 
 		{
 			System.err.println ("Error: Incorrect number of command line arguments");
@@ -25,10 +28,21 @@ public class A4Driver {
 			BufferedReader inRead = new BufferedReader(inputRead);
 			  
 			for (String s = dReader.readLine(); s != null; s = dReader.readLine()){
-					if(s.charAt(0) != '*'){
-						words.addWord(s.substring(0,5));
-					}
+				if(s.charAt(0) != '*'){
+					words.addWord(s.substring(0,WORDLENGTH));
 				}
+			}
+			for(String s = inRead.readLine(); s != null; s = inRead.readLine()){
+				String from = new String(s.substring(0,WORDLENGTH));
+				int off = 5;
+				while(s.charAt(off) == ' '){
+					off++;
+				}
+				int offEnd = off + WORDLENGTH;
+				String to = new String(s.substring(off, offEnd));
+				String output = MakeLadder(from, to, 0);
+				System.out.print(output);
+			}
 		}catch (FileNotFoundException e) {
             // File not found
             e.printStackTrace();
