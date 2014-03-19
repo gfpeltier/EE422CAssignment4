@@ -3,7 +3,6 @@ package assignment4;
 import java.util.*;
 import java.io.*;
 
-import Assignment3.A3Driver;
 
 public class A4Driver {
 
@@ -18,6 +17,7 @@ public class A4Driver {
 		}
 		File dictionary = new File(args[0]);
 		File input = new File(args[1]);
+		Dictionary words = new Dictionary();
 		try{
 			FileReader dictRead = new FileReader(dictionary);
 			BufferedReader dReader = new BufferedReader(dictRead);
@@ -25,7 +25,9 @@ public class A4Driver {
 			BufferedReader inRead = new BufferedReader(inputRead);
 			  
 			for (String s = dReader.readLine(); s != null; s = dReader.readLine()){
-					// Use appropriate methods here from dictionary class to produce dictionary object
+					if(s.charAt(0) != '*'){
+						words.addWord(s.substring(0,5));
+					}
 				}
 		}catch (FileNotFoundException e) {
             // File not found
