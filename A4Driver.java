@@ -13,6 +13,8 @@ public class A4Driver {
 	 */
 	public static void main(String[] args) {
 		
+		final StopWatch clock = new StopWatch();
+		clock.start();
 		if (args.length != 2) 
 		{
 			System.err.println ("Error: Incorrect number of command line arguments");
@@ -33,6 +35,9 @@ public class A4Driver {
 				}
 			}
 			for(String s = inRead.readLine(); s != null; s = inRead.readLine()){
+				if(s.length() < 11){
+					System.out.print("One or more of the words is less than 5 characters in length.\n");
+				}else{
 				String from = new String(s.substring(0,WORDLENGTH));
 				int off = 5;
 				while(s.charAt(off) == ' '){
@@ -40,9 +45,13 @@ public class A4Driver {
 				}
 				int offEnd = off + WORDLENGTH;
 				String to = new String(s.substring(off, offEnd));
+				from = NumDiffLetters(from, to);
 				String output = MakeLadder(from, to, 0);
 				System.out.print(output);
+				}
 			}
+			clock.stop();
+			System.out.println("Elapsed time: " + clock.getElapsedTime() + " milliseconds");
 		}catch (FileNotFoundException e) {
             // File not found
             e.printStackTrace();
@@ -52,6 +61,16 @@ public class A4Driver {
             e.printStackTrace();
       }
 
+	}
+	
+	public static String NumDiffLetters(String from, String to){
+		int numDiff = 0;
+		for(int k = 0; k < from.length(); k++){
+			if(from.charAt(k) == to.charAt(k)){
+				numDiff++;
+			}
+		}
+		return numDiff + from;
 	}
 
 	public static String MakeLadder(String fromWord, String toWord, int lastChange){
