@@ -46,8 +46,19 @@ public class A4Driver {
 				int offEnd = off + WORDLENGTH;
 				String to = new String(s.substring(off, offEnd));
 				from = NumDiffLetters(from, to);
-				String output = MakeLadder(from, to, 0);
-				System.out.print(output);
+				ArrayList<String> empty = new ArrayList<String>();
+				ArrayList<String> attempt = new ArrayList<String>();
+				empty.add(from);
+				ArrayList<String> output = MakeLadder(from, to, 0, empty, 0, words, attempt);
+				if(output.contains("noLadder")){
+					System.out.println("There is no word ladder from " + from + " to " + to);
+				}else{
+					Iterator<String> i = output.iterator();
+					while(i.hasNext()){
+						System.out.println(i.next());
+						}
+					}
+				System.out.print("\n\n");
 				}
 			}
 			clock.stop();
@@ -73,8 +84,27 @@ public class A4Driver {
 		return numDiff + from;
 	}
 
-	public static String MakeLadder(String fromWord, String toWord, int lastChange){
-		return "";  	// Just to prevent errors for now. Must remove later. Consider returning array/arraylist instead
+	public static ArrayList<String> MakeLadder(String fromWord, String toWord, int lastChange, ArrayList<String> ladder, int marker, Dictionary words, ArrayList<String> attempted){
+		if(Integer.parseInt(ladder.get(ladder.size()).substring(0,1)) == 0){ return ladder;}
+		marker = (marker+1) % 6;
+		if(marker == 0){marker++;}
+		if(marker == lastChange){			// what about when nothing even works for the first word????
+			ladder.remove(ladder.size());
+			if(ladder.isEmpty()){
+				ladder.add("error");
+				return ladder;
+			}
+			MakeLadder(ladder.get(ladder.size()), toWord, lastChange, ladder, marker, words, attempted);
+			}
+		String newWord = words.findWord(fromWord, marker, attempted);
+		if(newWord.equals("noWord")){									// the logic of this if/else is more iterative than recursive
+			MakeLadder(fromWord, toWord, lastChange, ladder, marker, words, attempted); 	// this wont work here. It will just want to return
+		}else{
+			attempted.add(newWord);
+			newWord = NumDiffLetters(newWord, toWord);
+			ladder.add(newWord);
+			lastChange = marker;
+		}
 	}
 	
 }
